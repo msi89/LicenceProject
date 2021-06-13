@@ -1,0 +1,21 @@
+
+
+{% extends 'layouts/base.html' %}
+
+{% block title %} Home  | AES {% endblock title%}
+
+{% block content %}
+  {% if request.user %}
+      <a href="{% url 'logout' %}">
+          Log out
+      </a>
+  {% endif%}
+  <div id="lg"></div>
+{% endblock %}
+
+{% load static %}
+
+
+ {% block js %}
+ <script type="text/babel" src="{% static 'components/login.js' %}"></script>
+ {% endblock js %}
