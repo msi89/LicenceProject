@@ -1,7 +1,12 @@
 from django.urls import path, re_path
 
-from . import views
+from .views import DocumentListCreateView
 
 urlpatterns = [
-  path('', views.DocumentView.as_view())
+    path('', DocumentListCreateView.as_view({
+        'get': 'list'
+    })),
+    path('/<int:pk>/', DocumentListCreateView.as_view({
+        'get': 'retrieve'
+    }))
 ]

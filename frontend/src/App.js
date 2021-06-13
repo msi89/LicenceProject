@@ -5,33 +5,29 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import axios from 'axios'
+
 
 export default function App() {
+
+  React.useEffect(() => {
+    axios.get('/api/drive').then(res => console.log(res.data)).catch(err => console.error(err.response))
+  }, [])
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-          </ul>
-        </nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+        </ul>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/about">
             <About />
-          </Route>
-          <Route path="/users">
-            <Users />
           </Route>
           <Route path="/">
             <Home />
@@ -43,25 +39,9 @@ export default function App() {
 }
 
 function Home() {
-  const [files, setFiles] = React.useState([])
-
-  React.useEffect(()=> {
-   (async () => {
-      const rq = await fetch('/documents' )
-      const res = await rq.json()
-      setFiles(res)
-   })()
-  }, [files])
-
-  return <div>
-  {files.map(f => <div key={f.id}> { f.name } </div>)}
-  </div>;
+  return <h2>Home</h2>;
 }
 
 function About() {
   return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }

@@ -7,6 +7,7 @@ def upload_to_dir(instance, filename):
 
 
 class Folder(models.Model):
+  id = models.AutoField(primary_key=True)
   name = models.CharField(max_length=255)
   parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
   is_private = models.BooleanField(default=True)
@@ -18,6 +19,7 @@ class Folder(models.Model):
     return self.name
 
 class Document(models.Model):
+  id = models.AutoField(primary_key=True)
   name = models.CharField(max_length=255)
   content = models.FileField(upload_to=upload_to_dir, null=True, blank=True)
   directory = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True, blank=True)
