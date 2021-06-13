@@ -43,7 +43,19 @@ export default function App() {
 }
 
 function Home() {
-  return <h2>Home</h2>;
+  const [files, setFiles] = React.useState([])
+
+  React.useEffect(()=> {
+   (async () => {
+      const rq = await fetch('/documents' )
+      const res = await rq.json()
+      setFiles(res)
+   })()
+  }, [files])
+
+  return <div>
+  {files.map(f => <div key={f.id}> { f.name } </div>)}
+  </div>;
 }
 
 function About() {

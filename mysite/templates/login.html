@@ -16,6 +16,9 @@
      </div>
       <!-- <input type="text" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/> -->
       <div class="form_control">
+        {% if request.session.error %}
+         {{ request.session.error }}
+        {% endif %}
         {{ form.password.errors }}
         <label for="{{ form.password.id_for_label }}">
           {{form.password.label}}:

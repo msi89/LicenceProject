@@ -9,6 +9,8 @@ def home(request):
 
 def signin(request):
   if request.method == 'POST':
+    if 'error' in request.session:
+      del request.session['error']
     form = LoginForm(request.POST)
     if form.is_valid():
       cd = form.cleaned_data
@@ -20,7 +22,8 @@ def signin(request):
           else:
             return HttpResponse('Disabled account')
       else:
-          return HttpResponse('Invalid login')
+        request.session['error'] = 'Invalid credentials'
+        return redirect('/login')
   form = LoginForm()
   return render(request, 'login.html', {'form': form})
 

@@ -58,6 +58,28 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 category = "main"
+description = "django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS)."
+name = "django-cors-headers"
+optional = false
+python-versions = ">=3.6"
+version = "3.7.0"
+
+[package.dependencies]
+Django = ">=2.2"
+
+[[package]]
+category = "main"
+description = "Web APIs for Django, made easy."
+name = "djangorestframework"
+optional = false
+python-versions = ">=3.5"
+version = "3.12.4"
+
+[package.dependencies]
+django = ">=2.2"
+
+[[package]]
+category = "main"
 description = "Encrypt and decrypt files and streams in AES Crypt format (version 2)"
 name = "pyaescrypt"
 optional = false
@@ -92,7 +114,7 @@ python-versions = ">=3.5"
 version = "0.4.1"
 
 [metadata]
-content-hash = "89f8b2030fb4ca5eb7fb5cea1f0fb607ff6daacbac0acb00d6a630d37c4d094a"
+content-hash = "e6e9d64f2a431e205bb4c19793420edb26faad06cc98b4c34fb27aeccda1b1e9"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -168,6 +190,14 @@ cryptography = [
 django = [
     {file = "Django-3.1.5-py3-none-any.whl", hash = "sha256:efa2ab96b33b20c2182db93147a0c3cd7769d418926f9e9f140a60dca7c64ca9"},
     {file = "Django-3.1.5.tar.gz", hash = "sha256:2d78425ba74c7a1a74b196058b261b9733a8570782f4e2828974777ccca7edf7"},
+]
+django-cors-headers = [
+    {file = "django-cors-headers-3.7.0.tar.gz", hash = "sha256:96069c4aaacace786a34ee7894ff680780ec2644e4268b31181044410fecd12e"},
+    {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},
+    {file = "djangorestframework-3.12.4.tar.gz", hash = "sha256:f747949a8ddac876e879190df194b925c177cdeb725a099db1460872f7c0a7f2"},
 ]
 pyaescrypt = [
     {file = "pyAesCrypt-6.0.0-py3-none-any.whl", hash = "sha256:cfbc05f0bac12d9f0446bb9c824648786cfa5c1ee7bf73674e396bd0749e2963"},
