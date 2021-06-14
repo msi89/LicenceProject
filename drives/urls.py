@@ -6,7 +6,7 @@ urlpatterns = [
     path('', DocumentListCreateView.as_view({
         'get': 'list'
     })),
-    path('/<int:pk>/', DocumentListCreateView.as_view({
+    path('<int:pk>/', DocumentListCreateView.as_view({
         'get': 'retrieve'
     }))
 ]
