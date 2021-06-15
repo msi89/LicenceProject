@@ -2,3 +2,4 @@ django
 djangorestframework
 pyaescrypt
 django-cors-headers
+djoser
