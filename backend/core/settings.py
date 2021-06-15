@@ -60,7 +60,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # BASE_DIR / 'frontend/build',
+            BASE_DIR / '../frontend/build',
             BASE_DIR / 'templates'
         ],
         'APP_DIRS': True,
@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['*']
 X_FRAME_OPTIONS = '*'
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/build/static',
+    BASE_DIR / '../frontend/build/static',
     BASE_DIR / 'static'
 ]
 MEDIA_URL = '/media/'

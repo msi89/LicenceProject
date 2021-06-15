@@ -19,21 +19,17 @@ from django.urls import path, re_path, include
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
-from . import views
+from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.signin),
     path('logout/', views.signout, name='logout'),
-    path('', TemplateView.as_view(template_name="index.html")),
+    path('api/', include('drives.urls')),
     re_path(
-        'dashboard/.*',
+        '(^(?!(api|admin|logout|login|media)).*$)',
         login_required(TemplateView.as_view(template_name="index.html"),
                        login_url='login/')),
-    # re_path(
-    #     '(^(?!(api|admin|logout|login)).*$)', TemplateView.as_view(template_name="index.html")),
-
-    path('api/', include('drives.urls'))
 ]
 
 

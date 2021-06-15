@@ -11,7 +11,7 @@ import axios from 'axios'
 export default function App() {
 
   React.useEffect(() => {
-    axios.get('/api/drive').then(res => console.log(res.data)).catch(err => console.error(err.response))
+    axios.get('/api/drives/documents').then(res => console.log(res.data)).catch(err => console.error(err.response))
   }, [])
   return (
     <Router>
