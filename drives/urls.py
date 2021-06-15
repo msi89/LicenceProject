@@ -1,12 +1,12 @@
-from django.urls import path, re_path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import DocumentViewSet, FolderViewSet
 
-from .views import DocumentListCreateView
+router = DefaultRouter()
+router.register('documents', DocumentViewSet)
+router.register('directories', FolderViewSet)
+
 
 urlpatterns = [
-    path('', DocumentListCreateView.as_view({
-        'get': 'list'
-    })),
-    path('<int:pk>/', DocumentListCreateView.as_view({
-        'get': 'retrieve'
-    }))
+    path('drives/', include(router.urls))
 ]

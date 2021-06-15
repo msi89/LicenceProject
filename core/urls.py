@@ -25,14 +25,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.signin),
     path('logout/', views.signout, name='logout'),
-    # path('', login_required(views.home, login_url='login/')),
+    path('', TemplateView.as_view(template_name="index.html")),
     re_path(
         'dashboard/.*',
         login_required(TemplateView.as_view(template_name="index.html"),
                        login_url='login/')),
-    re_path(
-        '(^(?!(api|admin|logout|login)).*$)', TemplateView.as_view(template_name="index.html")),
-    path('api/drives/', include('drives.urls'))
+    # re_path(
+    #     '(^(?!(api|admin|logout|login)).*$)', TemplateView.as_view(template_name="index.html")),
+
+    path('api/', include('drives.urls'))
 ]
 
 
