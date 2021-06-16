@@ -23,6 +23,13 @@ const Topbar = () => {
                 <span>Jessica</span>
                 <div className="shape-rounded center">J</div>
             </a>
+
+            <button className="btn btn-icon">
+                <span class="material-icons">
+                    menu_open
+                </span>
+            </button>
+
         </div>
     </div>
 }
