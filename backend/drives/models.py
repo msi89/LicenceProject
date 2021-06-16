@@ -13,6 +13,8 @@ class Folder(models.Model):
     parent = models.ForeignKey(
         'self', on_delete=models.CASCADE, null=True, blank=True)
     is_private = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(
@@ -30,6 +32,9 @@ class Document(models.Model):
     directory = models.ForeignKey(
         Folder, on_delete=models.CASCADE, null=True, blank=True)
     is_private = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+    is_favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(
