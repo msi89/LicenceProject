@@ -7,6 +7,7 @@ import {
 import axios from 'axios'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import NotFound from './pages/404'
 
 export default function App() {
 
@@ -21,6 +22,9 @@ export default function App() {
         </Route>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route default >
+          <NotFound />
         </Route>
       </Switch>
     </Router>
