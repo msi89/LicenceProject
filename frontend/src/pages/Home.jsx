@@ -5,8 +5,10 @@ import FolderTableRow from '../components/FolderTableRow'
 import Toolbar from '../components/partials/Toolbar'
 import Loader from '../components/controls/Loader'
 import { useLocation } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import { selectedDriveState } from '../store'
 
-const folders = [
+const afolders = [
     {
         "id": 1,
         "uuid": '3ee-1',
@@ -19,7 +21,7 @@ const folders = [
         'created_at': '10/08/2012'
     },
 ]
-const files = [
+const afiles = [
     {
         "id": 1,
         "uuid": '3ee-3',
@@ -51,35 +53,50 @@ const files = [
     }
 ]
 const Home = () => {
+    const [loading, setLoading] = React.useState([])
+    const [folders, setFolders] = React.useState([])
+    const [files, setFiles] = React.useState([])
+    const setSelectedDrive = useSetRecoilState(selectedDriveState)
 
     const location = useLocation();
 
     React.useEffect(() => {
+        setSelectedDrive()
+        setLoading(true)
+        setTimeout(() => {
+            setFolders(afolders)
+            setFiles(afiles)
+            setLoading(false)
+        }, 2000)
         console.log(location.pathname);
     }, [location]);
 
     return <MainLayout>
 
         <div className="container">
-            <Toolbar />
-            <Loader />
-            <Loader template="dot" />
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Sharing</th>
-                        <th>Last modified</th>
-                        <th>Size</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {folders.map(folder => <FolderTableRow key={folder.id} folder={folder} />)}
-                    {files.map(file => <FileTableRow key={file.id} file={file} />)}
-                </tbody>
-            </table>
+
+            {loading ? <Loader template="dot" /> : <div>
+                <Toolbar />
+                {/* <div className="drawer">gffghf fghgfhgf</div> */}
+
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Sharing</th>
+                            <th>Last modified</th>
+                            <th>Size</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {folders.map(folder => <FolderTableRow key={folder.id} folder={folder} />)}
+                        {files.map(file => <FileTableRow key={file.id} file={file} />)}
+                    </tbody>
+                </table>
+            </div>
+            }
         </div>
     </MainLayout>
 }

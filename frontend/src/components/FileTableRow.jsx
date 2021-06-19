@@ -2,6 +2,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import { selectedDriveState } from '../store'
 import Icon from './controls/Icon'
+import Dropdown from './controls/Dropdown'
 
 function getExt(filename) {
     return filename.split('.').pop()
@@ -54,11 +55,32 @@ const FileTableRow = ({ file }) => {
         <td>{file.created_at}</td>
         <td>{file.size || null}</td>
         <td>
-            {/* <button className="btn">
-                <span className="material-icons" style={{ color: '#555' }}>
-                    more_horiz
-                </span>
-            </button> */}
+            <Dropdown>
+                <Dropdown.Button className="btn">
+                    <span className="material-icons" style={{ color: '#555' }}>
+                        more_horiz
+                    </span>
+                </Dropdown.Button>
+                <Dropdown.Content className="dropdown right-10">
+                    <Dropdown.Item className="dropdown-item flex">
+                        <Icon name="download" className="text-primary" size={18} />
+                        <span style={{ margin: '0 2px' }}>Скачать</span>
+                    </Dropdown.Item>
+
+                    {file.is_private ?
+                        <Dropdown.Item className="dropdown-item flex">
+                            <Icon name="unlock" className="text-primary" size={18} />
+                            <span style={{ margin: '0 2px' }}>Расшифровать</span>
+                        </Dropdown.Item> : <Dropdown.Item className="dropdown-item flex">
+                            <Icon name="lock" className="text-primary" size={18} />
+                            <span style={{ margin: '0 2px' }}>Зашифровать</span>
+                        </Dropdown.Item>}
+                    <Dropdown.Item className="dropdown-item flex">
+                        <Icon name="trash" className="text-primary" size={18} />
+                        <span style={{ margin: '0 2px' }}>Удалить</span>
+                    </Dropdown.Item>
+                </Dropdown.Content>
+            </Dropdown>
         </td>
     </tr>
 }

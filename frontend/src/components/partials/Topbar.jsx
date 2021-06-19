@@ -1,4 +1,5 @@
 import React from 'react'
+import Dropdown from '../controls/Dropdown'
 
 const Topbar = () => {
     return <div className="topbar">
@@ -19,16 +20,25 @@ const Topbar = () => {
                     settings
                 </span>
             </a>
-            <a className="profile">
-                <span>Jessica</span>
-                <div className="shape-rounded center">J</div>
-            </a>
 
-            <button className="btn btn-icon">
+            <Dropdown>
+                <Dropdown.Button className="profile">
+                    <span>Jessica</span>
+                    <div className="shape-rounded center">J</div>
+                </Dropdown.Button>
+                <Dropdown.Content className="dropdown">
+                    <Dropdown.Item className="dropdown-item flex">
+                        <span style={{ marginLeft: '5px', fontSize: '13px' }}>Выити</span>
+                    </Dropdown.Item>
+                </Dropdown.Content>
+            </Dropdown>
+
+
+            {/* <button className="btn btn-icon">
                 <span className="material-icons">
                     menu_open
                 </span>
-            </button>
+            </button> */}
 
         </div>
     </div>

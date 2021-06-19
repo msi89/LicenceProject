@@ -22,6 +22,21 @@ a{
   align-items: center;
   justify-content: center;
 }
+.right-0{
+  right: 0;
+}
+.right-10{
+  right: 10px;
+}
+.input{
+  border: 1px solid #ccc;
+  padding: 8px 5px;
+  width: 100%;
+}
+.input:focus{
+  border: 1px solid var(--main-color);
+  outline: none;
+}
 .btn{
   outline: none;
   border:0;
@@ -41,17 +56,32 @@ a{
   justify-content: center;
   border-radius: 50%;
 }
+.btn-icon:hover{
+  background: rgba(0, 0, 0, 0.1);
+}
 .btn-primary{
   background: var(--main-color);
   padding: 8px 10px;
   color: #fff;
 }
 .btn-primary:hover{
-  background: var(--main-color-dark);
+  background: var(--main-color);
 }
-.btn-icon:hover{
-  background: rgba(0, 0, 0, 0.1);
+.btn-primary:disabled{
+  background: #F3F2F1;
+  color: #B6B8B5;
+  cursor: not-allowed;
 }
+.btn-primary-light{
+  background: transparent;
+  padding: 8px 10px;
+  border: 1px solid var(--main-color-dark);;
+  color: var(--main-color-dark);
+}
+.btn-primary-light:hover{
+  background: var(--main-color);
+  color: #fff;
+} 
 .main{
   position: fixed;
   width: 100%;
@@ -195,8 +225,17 @@ a{
 .justify-center{
   justify-content: center;
 }
+.justify-end{
+  justify-content: flex-end;
+}
 .page{
   height: 100vh;
+}
+.relative{
+  position: relative;
+}
+.absolute{
+  position: absolute;
 }
 .bg-primary{
   background-color: var(--main-color);
@@ -212,6 +251,7 @@ a{
 }
 .container{
   margin: 0 20px;
+  user-select: none;
 }
 .table{
   width: 100%;
@@ -253,3 +293,66 @@ a{
 .toolbar .btn:hover{
   background: rgba(0, 0, 0, 0.1)
 }
+
+.drawer{
+  position: absolute;
+  width: 400px;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: 0 0 16px 0 rgba(0,0,0,.4);
+}
+
+.od-Dialog {
+  background-color: transparent;
+  position: absolute;
+  top: 48px;
+  bottom: 0;
+  width: 100%;
+  display: block;
+  font-size: 0;
+  line-height: 100vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.od-Dialog-main {
+  vertical-align: middle;
+  display: inline-block;
+  box-shadow: 0 0 16px 0 rgba(0,0,0,.4);
+  background-color: #ffffff;
+  box-sizing: border-box;
+  line-height: normal;
+  width: 100%;
+  min-height: 100px;
+  outline: 0;
+  visibility: hidden;
+}
+.od-Dialog-content {
+  position: relative;
+  width: 100%;
+}
+.dropdown{
+  position: absolute;
+  min-width: 150px;
+  background-color: #ffffff;
+  box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px, rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
+    outline: transparent;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all .1s ease-in-out;
+}
+.dropdown.visible{
+  visibility: visible;
+  transform: translateY(0px);
+}
+.dropdown-item{
+  padding: 10px 5px;
+}
+.dropdown-item:hover{
+  background-color: var(--highlight-color);
+  cursor: pointer;
+}
+

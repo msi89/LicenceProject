@@ -1,8 +1,9 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { DropzoneContext } from '../layouts/Main'
 
 const Sidebar = () => {
-
+    const { dropzone } = React.useContext(DropzoneContext)
     return <div className="sidebar">
         <div className="brand-logo">
 
@@ -19,7 +20,11 @@ const Sidebar = () => {
         </div>
         <div className="sidebar-content">
             <div className="sidebar-header">
-                <button className="btn button-upload-file">Upload new file</button>
+
+                <button className="btn button-upload-file"
+                    onClick={() => dropzone.open()}>
+                    Upload new file
+                </button>
             </div>
             <ul className="sidebar-nav">
                 <li>
