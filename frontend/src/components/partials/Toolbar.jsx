@@ -9,28 +9,30 @@ const Toolbar = () => {
 
     return <div className="toolbar flex">
         <button className="btn">
-            <Icon name="plus" fill="#0d4aac" size="16" />
+            <Icon name="plus" className="text-primary" />
             <span style={{ margin: '0 2px' }}>Create</span>
             <Icon name="arrow_down" size="10" fill="#555" />
         </button>
 
         <button className="btn">
-            <span class="material-icons" style={{ color: '#0d4aac' }}>
-                keyboard_arrow_down
-            </span>
+            <Icon name="upload" className="text-primary" size={18} />
             <span style={{ margin: '0 2px' }}>Upload</span>
         </button>
         {selectedDrive?.id && <div className="flex">
             <button className="btn">
-                <Icon name="download" className="text-primary" />
+                <Icon name="download" className="text-primary" size={18} />
                 <span style={{ margin: '0 2px' }}>Download</span>
             </button>
             <button className="btn">
-                <Icon name="lock" fill="#0d4aac" size="16" />
+                <Icon name="unlock" className="text-primary" size={18} />
                 <span style={{ margin: '0 2px' }}>Decrypt</span>
             </button>
             <button className="btn">
-                <Icon name="plus" fill="#0d4aac" size="16" />
+                <Icon name="lock" className="text-primary" size={18} />
+                <span style={{ margin: '0 2px' }}>Encrypt</span>
+            </button>
+            <button className="btn">
+                <Icon name="trash" className="text-primary" size={18} />
                 <span style={{ margin: '0 2px' }}>Remove</span>
             </button>
         </div>}

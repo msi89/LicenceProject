@@ -23,6 +23,18 @@ export default function App() {
         <Route path="/login">
           <Login />
         </Route>
+        <Route path="/shared">
+          <Home />
+        </Route>
+        <Route path="/recents">
+          <Home />
+        </Route>
+        <Route path="/favorites">
+          <Home />
+        </Route>
+        <Route path="/trash">
+          <Home />
+        </Route>
         <Route default >
           <NotFound />
         </Route>

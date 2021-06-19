@@ -27,7 +27,7 @@ const FolderTableRow = ({ folder }) => {
         <td>...</td>
         <td>
             {/* <button className="btn">
-                <span class="material-icons" style={{ color: '#555' }}>
+                <span className="material-icons" style={{ color: '#555' }}>
                     more_horiz
                 </span>
             </button> */}

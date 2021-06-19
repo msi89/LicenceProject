@@ -10,7 +10,7 @@ const NotFound = () => {
                 This link you clicked maybe broken or the may have been removed or renamed.
             </div>
             <NavLink to="/" className="btn btn-primary">
-                <span class="material-icons">
+                <span className="material-icons">
                     arrow_back
                 </span>
                 <span style={{ marginLeft: '5px', fontSize: '14px' }}>Go back</span>

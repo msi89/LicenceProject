@@ -3,6 +3,8 @@ import MainLayout from '../components/layouts/Main'
 import FileTableRow from '../components/FileTableRow'
 import FolderTableRow from '../components/FolderTableRow'
 import Toolbar from '../components/partials/Toolbar'
+import Loader from '../components/controls/Loader'
+import { useLocation } from 'react-router-dom'
 
 const folders = [
     {
@@ -50,18 +52,28 @@ const files = [
 ]
 const Home = () => {
 
+    const location = useLocation();
+
+    React.useEffect(() => {
+        console.log(location.pathname);
+    }, [location]);
+
     return <MainLayout>
 
         <div className="container">
             <Toolbar />
+            <Loader />
+            <Loader template="dot" />
             <table className="table">
                 <thead>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Sharing</th>
-                    <th>Last modified</th>
-                    <th>Size</th>
-                    <th></th>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Sharing</th>
+                        <th>Last modified</th>
+                        <th>Size</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                     {folders.map(folder => <FolderTableRow key={folder.id} folder={folder} />)}

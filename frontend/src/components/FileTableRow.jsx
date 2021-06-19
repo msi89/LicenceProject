@@ -46,7 +46,7 @@ const FileTableRow = ({ file }) => {
         </td>
         <td>
             {file.is_private &&
-                <span class="material-icons" style={{ color: '#777' }}>
+                <span className="material-icons" style={{ color: '#777' }}>
                     lock
                 </span>
             }
@@ -55,7 +55,7 @@ const FileTableRow = ({ file }) => {
         <td>{file.size || null}</td>
         <td>
             {/* <button className="btn">
-                <span class="material-icons" style={{ color: '#555' }}>
+                <span className="material-icons" style={{ color: '#555' }}>
                     more_horiz
                 </span>
             </button> */}
