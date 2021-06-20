@@ -67,7 +67,7 @@ const Home = () => {
             setFolders(afolders)
             setFiles(afiles)
             setLoading(false)
-        }, 2000)
+        }, 500)
         console.log(location.pathname);
     }, [location]);
 

@@ -5,56 +5,60 @@ import styled from 'styled-components'
 const Context = React.createContext({ visible: false, closable: true, setVisible: () => { } })
 
 const Header = ({ children }) => {
-    const { closable, setVisible } = React.useContext(Context)
-    const closeHandler = () => {
-        setVisible(false);
-    };
+  const { closable, setVisible } = React.useContext(Context)
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
-    return <div className="popup-header">
-        <div className="popup-title">{children}</div>
-        {closable && (
-            <span className="popup-close" onClick={closeHandler}>
-                &times;
-            </span>
-        )}
-    </div>
+  return <div className="popup-header">
+    <div className="popup-title">{children}</div>
+    {closable && (
+      <span className="popup-close" onClick={closeHandler}>
+        &times;
+      </span>
+    )}
+  </div>
 }
 
 const Body = ({ children, className }) => {
-    return <div className={["popup-body", className].join(" ")}>
-        {children}
-    </div>
+  return <div className={["popup-body", className].join(" ")}>
+    {children}
+  </div>
 }
 
-const Modal = ({ children, width, refId, closable = true, dismissible = true }) => {
-    const [visible, setVisible] = useState(false);
+const Modal = ({ children, width, refId, closable = true, dismissible = true, onClose, onOpen }) => {
+  const [visible, setVisible] = useState(false);
 
-    useImperativeHandle(refId, () => ({
-        open() {
-            setVisible(true);
-        },
-        close() {
-            setVisible(false);
-        },
-    }));
+  useImperativeHandle(refId, () => ({
+    open() {
+      setVisible(true);
+      if (onOpen)
+        onOpen()
+    },
+    close() {
+      setVisible(false);
+      if (onClose)
+        onClose()
+    },
+  }));
 
-    function handleDismiss(e) {
-        if (dismissible && e.target.id && e.target.id === 'popup-overlay') {
-            setVisible(false);
-        }
+  function handleDismiss(e) {
+    if (dismissible && e.target.id && e.target.id === 'popup-overlay') {
+      setVisible(false);
     }
+  }
 
-    return (
-        <Wrapper>
-            <Context.Provider value={{ visible, setVisible, closable }} >
-                <div className={`popup ${visible ? "visible" : ""}`} ref={refId} id="popup-overlay" onClick={handleDismiss}>
-                    <div className="popup-content" style={{ width: `${width || 600}px` }}>
-                        {children}
-                    </div>
-                </div>
-            </Context.Provider>
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      <Context.Provider value={{ visible, setVisible, closable }} >
+        <div className={`popup ${visible ? "visible" : ""}`} ref={refId} id="popup-overlay" onClick={handleDismiss}>
+          <div className="popup-content" style={{ width: `${width || 600}px` }}>
+            {children}
+          </div>
+        </div>
+      </Context.Provider>
+    </Wrapper>
+  );
 };
 
 Modal.Header = Header

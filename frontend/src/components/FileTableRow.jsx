@@ -3,27 +3,8 @@ import { useRecoilState } from 'recoil'
 import { selectedDriveState } from '../store'
 import Icon from './controls/Icon'
 import Dropdown from './controls/Dropdown'
+import { getFileIcon } from '../helpers'
 
-function getExt(filename) {
-    return filename.split('.').pop()
-}
-
-const getTypeIcon = (filename) => {
-    const ext = getExt(filename + "".toLowerCase())
-    if (['doc', 'docx', 'docm', 'ttf'].includes(ext)) {
-        return 'msword'
-    }
-    if (['pptm', 'pptx', 'ppt'].includes(ext)) {
-        return 'mspowerpoint'
-    }
-    if (['xls', 'xlsx', 'xlsm', 'xlsb', 'xltx'].includes(ext)) {
-        return 'msexcel'
-    }
-    if (['pdf', 'ps', 'eps'].includes(ext)) {
-        return 'pdf-2'
-    }
-    return 'file'
-}
 
 const FileTableRow = ({ file }) => {
 
@@ -41,7 +22,7 @@ const FileTableRow = ({ file }) => {
         <td></td>
         <td>
             <div className="flex items-center  cursor-pointer">
-                <Icon name={getTypeIcon(file.name)} size="18" />
+                <Icon name={getFileIcon(file.name)} size="18" />
                 <span style={{ marginLeft: '10px' }}> {file.name}</span>
             </div>
         </td>

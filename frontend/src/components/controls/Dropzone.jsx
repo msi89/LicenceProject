@@ -1,59 +1,84 @@
 import React from 'react'
 import styled from 'styled-components';
-import MyDropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone'
+import Uploader from '../Uploader'
+import { useSetRecoilState } from 'recoil';
+import { onUploadState } from '../../store';
 
-const Dropzone = () => {
+const MyDropzone = ({ onClose }) => {
+    const setOnUpload = useSetRecoilState(onUploadState)
+    const [visible, setVisible] = React.useState(true)
+    const [ondrag, setOndrag] = React.useState(false)
+    const [files, setFiles] = React.useState([])
 
-    // const dragOver = (e) => {
-    //     e.preventDefault();
-    //     console.log('dragOver');
-    // }
+    const onDragEnter = React.useCallback((e) => {
+        setOndrag(true)
+    }, [])
 
-    // const dragEnter = (e) => {
-    //     e.preventDefault();
-    //     console.log('dragEnter');
-    // }
+    const onDragLeave = React.useCallback((e) => {
+        setOndrag(false)
+    }, [])
 
-    // const dragLeave = (e) => {
-    //     e.preventDefault();
-    //     console.log('dragLeave');
-    // }
+    const onDrop = React.useCallback((acceptedFiles) => {
+        setFiles(acceptedFiles)
+        setVisible(false)
+        setOnUpload(true)
+    }, [])
 
-    // const fileDrop = (e) => {
-    //     e.preventDefault();
-    //     console.log('fileDrop');
-    //     const files = e.dataTransfer.files;
-    //     console.log(files);
-    // }
+    const handleClose = React.useCallback(() => {
+        if (onClose)
+            onClose()
+        setOnUpload(false)
+        setVisible(true)
+        setFiles([])
+        setOndrag(false)
+    })
 
-    // return <Wrapper><div className="dropzone"
-    //     onDragOver={dragOver}
-    //     onDragEnter={dragEnter}
-    //     onDragLeave={dragLeave}
-    //     onDrop={fileDrop}>
-    // </div>
-
-    // </Wrapper>
-    return <MyDropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-        {({ getRootProps, getInputProps }) => (
-            <section>
-                <div {...getRootProps()}>
+    return <Wrapper >
+        {visible ? <Dropzone onDragEnter={onDragEnter} onDrop={onDrop} onDragLeave={onDragLeave}>
+            {({ getRootProps, getInputProps }) => (
+                <div {...getRootProps()} className={[
+                    'dropzone',
+                    visible ? 'visible' : '',
+                    ondrag ? 'ondrag' : ''
+                ].join(' ')}>
                     <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <p>Перетащите сюда несколько или нажмите для выбора файлов</p>
                 </div>
-            </section>
-        )}
-    </MyDropzone>
+            )}
+        </Dropzone> :
+            <div style={{ paddingTop: '10px' }}>
+                {files.map((file, f) => <Uploader key={f} file={file} />)}
+                <div className="flex justify-end" style={{ background: '#eee', padding: '10px' }}>
+                    <button className="btn btn-primary-light" onClick={handleClose}>Закрыть</button>
+                </div>
+            </div>}
+
+    </Wrapper>
 }
 
 const Wrapper = styled.div`
 .dropzone{
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: transparent;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:400px;
+  margin:10px;
+  border: 1px dashed rgba(0, 0, 0, 0.4);
+  visibility: hidden;
+  color: rgba(0, 0, 0, 0.4)
+}
+.dropzone p{
+    text-align: center;
+    width: 300px;
+}
+.dropzone.visible{
+    visibility: visible;
+}
+.dropzone.ondrag{
+    border: 2px dashed #0d4aac;
+    color: #0d4aac;
 }
 `
-export default Dropzone
+export default MyDropzone

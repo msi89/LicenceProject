@@ -5,10 +5,9 @@ export const selectedDriveState = atom({
     default: {},
 });
 
-export const uploadFileState = atom({
-    key: "upload-file-state",
-    default: [],
-    dangerouslyAllowMutability: true
+export const onUploadState = atom({
+    key: "on-upload-state",
+    default: false
 });
 
 export const breadcrumbs = atom({
