@@ -231,6 +231,15 @@ a{
 .justify-between{
   justify-content: space-between;
 }
+.flex-1{
+  flex: 1;
+}
+.flex-auto{
+  flex: auto;
+}
+.flex-none{
+  flex: none;
+}
 .page{
   height: 100vh;
 }

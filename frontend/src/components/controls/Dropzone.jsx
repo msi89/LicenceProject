@@ -17,12 +17,14 @@ const MyDropzone = ({ onClose }) => {
 
     const onDragLeave = React.useCallback((e) => {
         setOndrag(false)
+        console.log('onDragLeave');
     }, [])
 
     const onDrop = React.useCallback((acceptedFiles) => {
         setFiles(acceptedFiles)
         setVisible(false)
         setOnUpload(true)
+        console.log('onDrop');
     }, [])
 
     const handleClose = React.useCallback(() => {
@@ -53,7 +55,6 @@ const MyDropzone = ({ onClose }) => {
                     <button className="btn btn-primary-light" onClick={handleClose}>Закрыть</button>
                 </div>
             </div>}
-
     </Wrapper>
 }
 

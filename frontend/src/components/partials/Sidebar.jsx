@@ -1,12 +1,21 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { DropzoneContext } from '../layouts/Main'
+import { MainContext } from '../layouts/Main'
 
 const Sidebar = () => {
-    const { dropzone } = React.useContext(DropzoneContext)
+    const { uploadModal, setDropFiles } = React.useContext(MainContext)
+    const inputFile = React.useRef()
+
+    const HandleUploadFile = (e) => {
+        setDropFiles(Array.from(e.target.files))
+        uploadModal.current.open()
+    }
+
+
     return <div className="sidebar">
         <div className="brand-logo">
-
+            <input type="file" ref={inputFile} multiple onChange={HandleUploadFile}
+                style={{ visibility: 'hidden', position: 'absolute' }} />
             <div className="logo">
                 <svg enableBackground="new 0 0 503.589 503.589"
                     viewBox="0 0 503.589 503.589" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +31,7 @@ const Sidebar = () => {
             <div className="sidebar-header">
 
                 <button className="btn button-upload-file"
-                    onClick={() => dropzone.open()}>
+                    onClick={() => inputFile.current.click()}>
                     Upload new file
                 </button>
             </div>

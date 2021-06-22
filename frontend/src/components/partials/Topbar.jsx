@@ -1,13 +1,18 @@
 import React from 'react'
 import Dropdown from '../controls/Dropdown'
+import { MainContext } from '../layouts/Main'
+
 
 const Topbar = () => {
+
+    const { settingsModal } = React.useContext(MainContext)
+
     return <div className="topbar">
         <div className="search-box">
             <span className="material-icons">
                 search
             </span>
-            <input type="text" placeholder="search drive..." />
+            <input type="text" placeholder="поиск файлов..." />
         </div>
         <div className="nav">
             <a href="" className="btn btn-icon">
@@ -15,11 +20,11 @@ const Topbar = () => {
                     notifications
                 </span>
             </a>
-            <a href="" className="btn btn-icon">
+            <button onClick={() => settingsModal.current.open()} className="btn btn-icon">
                 <span className="material-icons">
                     settings
                 </span>
-            </a>
+            </button>
 
             <Dropdown>
                 <Dropdown.Button className="profile">

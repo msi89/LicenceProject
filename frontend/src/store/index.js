@@ -19,3 +19,8 @@ export const currentFolderState = atom({
     key: "current-folder-state",
     default: '/'
 });
+
+export const uploadPasswordState = atom({
+    key: "upload-password-state",
+    default: null
+});
