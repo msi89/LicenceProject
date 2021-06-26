@@ -15,10 +15,17 @@ const Topbar = () => {
 
     const { settingsModal } = React.useContext(MainContext)
 
-    // React.useEffect(() => {
-    //     me()
-    //     console.log('user', authUser);
-    // }, [])
+    const username = React.useMemo(() => {
+        return authUser?.first_name || authUser?.last_name
+    }, [authUser])
+
+    const usfirst = React.useMemo(() => {
+        const usr = authUser?.first_name || authUser?.last_name
+        if (usr?.length > 0) {
+            return username[0].toUpperCase()
+        }
+        return usr
+    }, [authUser])
 
     const handleLogout = () => {
         Storage.reset()
@@ -46,8 +53,8 @@ const Topbar = () => {
 
             <Dropdown>
                 <Dropdown.Button className="profile">
-                    <span>{authUser?.firstname || authUser?.lastname}</span>
-                    <div className="shape-rounded center">J</div>
+                    <span>{username}</span>
+                    <div className="shape-rounded center">{usfirst}</div>
                 </Dropdown.Button>
                 <Dropdown.Content className="dropdown">
                     <Dropdown.Item className="dropdown-item flex" onClick={handleLogout}>

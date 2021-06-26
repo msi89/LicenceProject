@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@msic89/toastly": "^1.0.4",
     "@reach/router": "^1.3.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -20,7 +21,7 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "BROWSER=no react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

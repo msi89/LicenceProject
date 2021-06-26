@@ -10,19 +10,21 @@ export const loginValidationSchema = Yup.object({
 })
 
 export const registerValidationSchema = Yup.object({
-    firstname: Yup.string()
+    first_name: Yup.string()
         .required("Имя обязательна"),
-    lastname: Yup.string()
+    last_name: Yup.string()
         .required("Фамиля обязательное"),
     email: Yup.string()
         .email("Неверный адрес электронной почты")
         .required("Электронная почта обязательна"),
     password: Yup.string()
         .required("Пароль обязательна")
-        .matches(
-            "^(?=.*[A-Za-z])(?=.*d)(?=.*[@$!%*#?&])[A-Za-zd@$!%*#?&]{6,}$",
-            "Должно содержать 8 символов, один прописной, один строчный, одну цифру и один символ специального регистра."
-        ),
+        .min(8, 'Пароль должен содержать не менее 8 символов.')
+        .matches(/[a-zA-Z]/, 'Пароль может содержать только латинские буквы.'),
+    // .matches(
+    //     /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+    //     "Пароль должен содержать не менее 8 символов, не менее одной строчной буквы, одной прописной буквы и специальных символов."
+    // ),
     password_confirm: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
 })

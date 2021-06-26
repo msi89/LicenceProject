@@ -11,6 +11,12 @@ export function getFileExtension(filename) {
     return filename.split('.').pop()
 }
 
+export function ucFisrt(str) {
+    if (str + "".length > 0)
+        return str[0].toUpperCase()
+    return str
+}
+
 export const getFileIcon = (filename) => {
     const ext = getFileExtension(filename + "".toLowerCase())
     if (['doc', 'docx', 'docm', 'ttf'].includes(ext)) {

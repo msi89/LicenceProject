@@ -4,37 +4,35 @@ import Button from '../components/controls/Button'
 import { BaseLink } from '../components/partials/NavItem'
 import { useFormik } from "formik";
 import { registerValidationSchema } from '../helpers/validators';
+import useAuthUser from '../store/actions/auth';
+import { navigate } from '@reach/router';
 
 
 
 const Register = () => {
-
-    const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState()
+    const { loading, register } = useAuthUser()
     const formik = useFormik({
         initialValues: {
-            firstname: "",
-            lastname: "",
+            first_name: "",
+            last_name: "",
             email: "",
             password: "",
             password_confirm: "",
-
         },
         validationSchema: registerValidationSchema,
         onSubmit: async (values) => {
-            // const response = await authService.login({
-            //     email: values.email,
-            //     password: values.password,
-            //     device_name: navigator.appName
-            // })
-            // if (response.error) {
-            //     toast.error(response.data.error);
-            // } else {
-            //     setIsAuth(true)
-            //     setAuthUser(response.data)
-            //     toast.success("Login successfully!");
-            //     redirect()
-            // }
+            setError("")
+            const rep = await register({
+                ...values,
+                username: values.email
+            })
+            if (rep.error) {
+                setError("Электронная почта не доступна")
+            } else {
+                formik.resetForm()
+                navigate('/login')
+            }
         },
     });
 
@@ -63,25 +61,25 @@ const Register = () => {
                     <div className="input-group">
                         <input type="text" className="input"
                             placeholder="Фамиля"
-                            name="lastname"
-                            value={formik.values.lastname}
+                            name="last_name"
+                            value={formik.values.last_name}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                         />
-                        {formik.errors.lastname && formik.touched.lastname && (
-                            <small className="text-error">{formik.errors.lastname}</small>
+                        {formik.errors.last_name && formik.touched.last_name && (
+                            <small className="text-error">{formik.errors.last_name}</small>
                         )}
                     </div>
                     <div className="input-group">
                         <input type="text" className="input"
                             placeholder="Имя"
-                            name="firstname"
-                            value={formik.values.firstname}
+                            name="first_name"
+                            value={formik.values.first_name}
                             onBlur={formik.handleBlur}
                             onChange={formik.handleChange}
                         />
-                        {formik.errors.firstname && formik.touched.firstname && (
-                            <small className="text-error">{formik.errors.firstname}</small>
+                        {formik.errors.first_name && formik.touched.first_name && (
+                            <small className="text-error">{formik.errors.first_name}</small>
                         )}
                     </div>
                     <div className="input-group">
@@ -125,7 +123,7 @@ const Register = () => {
                     </div>
                     <div className="input-group flex flex-col">
                         <Button className="btn btn-primary w-full"
-                            loading={loading}
+                            loading={loading} type="submit"
                         >Создать аккаунт</Button>
                     </div>
                 </div>

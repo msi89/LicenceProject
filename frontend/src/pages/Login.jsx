@@ -32,7 +32,7 @@ const Login = () => {
     });
 
     function redirect() {
-        const path = query.get('redirect') || -1
+        const path = query.get('redirect') || '/'
         navigate(path)
     }
 

@@ -3,3 +3,4 @@ djangorestframework
 pyaescrypt
 django-cors-headers
 djoser
+django-mptt
