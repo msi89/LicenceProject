@@ -17,9 +17,10 @@ class FileSystem:
         return self.normalize_file_name(outdir, tmp)
 
     def save_file(self, file, outdir, password=None):
-        path = os.path.join(os.getcwd(), outdir, file.name)
-        if not os.path.exists(path):
-            os.makedirs(path)
+        path = os.path.join(os.getcwd(), outdir, file.name.replace(" ", "_"))
+        if not os.path.exists(os.path.join(os.getcwd(), outdir)):
+            print('folder created')
+            os.makedirs(os.path.join(os.getcwd(), outdir))
         fs = FileSystemStorage()
         abs_name = fs.save(path, file)
         data = {}

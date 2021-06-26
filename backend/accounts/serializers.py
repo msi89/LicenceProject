@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from drives.models import Folder
+import os
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -23,4 +25,7 @@ class AccountSerializer(serializers.ModelSerializer):
     def create(self, validate_data):
         if 'email' not in validate_data:
             validate_data['email'] = validate_data['username']
-        return User.objects.create_user(**validate_data)
+        user = User.objects.create_user(**validate_data)
+        Folder.objects.create(name='/', owner=user, path=str(user.id))
+        os.makedirs(os.path.join(os.getcwd(), str(user.id)))
+        return user

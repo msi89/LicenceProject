@@ -1,4 +1,11 @@
 
+import Toastly from "@msic89/toastly";
+
+export const toast = new Toastly({
+    timeout: 4000,
+    position: "bottom-right",
+    dismissible: true,
+});
 
 export function getFileExtension(filename) {
     return filename.split('.').pop()

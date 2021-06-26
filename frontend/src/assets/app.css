@@ -7,8 +7,8 @@
 :root{
   --main-color: #2262C6;
   --main-color-dark: #0d4aac;
-  --accent-coler: #5380c7;
-  --folder-coler: #92CEFF;
+  --accent-color: #5380c7;
+  --folder-color: #92CEFF;
   --icon-color: #9AA8BC;
   --highlight-color: #E4EEFD;
   --border-color: #F6F8FB;
@@ -212,6 +212,12 @@ a{
   background: var(--main-color);
   color: #fff;
   margin: 0 5px;
+}
+.w-full{
+  width: 100%;
+}
+.h-full{
+  height: 100%;
 }
 .flex{
   display: flex;

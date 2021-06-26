@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { BaseLink } from './NavItem'
 import { MainContext } from '../layouts/Main'
 
 const Sidebar = () => {
@@ -37,44 +37,44 @@ const Sidebar = () => {
             </div>
             <ul className="sidebar-nav">
                 <li>
-                    <NavLink to="/" exact className="sidebar-nav-item">
+                    <BaseLink to="/" exact className="sidebar-nav-item">
                         <span className="material-icons">
                             laptop
                         </span>
                         <span>Computer</span>
-                    </NavLink>
+                    </BaseLink>
                 </li>
                 <li>
-                    <NavLink to="/recents" className="sidebar-nav-item">
+                    <BaseLink to="/recents" className="sidebar-nav-item">
                         <span className="material-icons">
                             history
                         </span>
                         <span>Recents</span>
-                    </NavLink>
+                    </BaseLink>
                 </li>
                 <li>
-                    <NavLink to="/shared" className="sidebar-nav-item">
+                    <BaseLink to="/shared" className="sidebar-nav-item">
                         <span className="material-icons">
                             folder_shared
                         </span>
                         <span>Shared</span>
-                    </NavLink>
+                    </BaseLink>
                 </li>
                 <li>
-                    <NavLink to="/favorites" className="sidebar-nav-item">
+                    <BaseLink to="/favorites" className="sidebar-nav-item">
                         <span className="material-icons">
                             star_purple500
                         </span>
                         <span>Favorites</span>
-                    </NavLink>
+                    </BaseLink>
                 </li>
                 <li>
-                    <NavLink to="/trash" className="sidebar-nav-item">
+                    <BaseLink to="/trash" className="sidebar-nav-item">
                         <span className="material-icons">
                             delete_outline
                         </span>
                         <span>Trash</span>
-                    </NavLink>
+                    </BaseLink>
                 </li>
             </ul>
         </div>

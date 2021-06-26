@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { BaseLink } from '../components/partials/NavItem'
 
 const NotFound = () => {
     return <div className="page flex center" style={{ fontSize: '24px' }}>
@@ -9,12 +9,12 @@ const NotFound = () => {
             <div style={{ fontSize: '14px', textAlign: 'center', width: '400px', margin: '30px 0' }}>
                 This link you clicked maybe broken or the may have been removed or renamed.
             </div>
-            <NavLink to="/" className="btn btn-primary">
+            <BaseLink to="/" className="btn btn-primary">
                 <span className="material-icons">
                     arrow_back
                 </span>
                 <span style={{ marginLeft: '5px', fontSize: '14px' }}>Go back</span>
-            </NavLink>
+            </BaseLink>
         </div>
     </div>
 }
