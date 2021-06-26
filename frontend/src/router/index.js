@@ -14,6 +14,10 @@ const RootRouter = () => {
         <Router>
             <Route default page={NotFound} />
             <Route path="/" page={Home} auth />
+            <Route path="/recents" page={Home} auth />
+            <Route path="/shared" page={Home} auth />
+            <Route path="/favorites" page={Home} auth />
+            <Route path="/trash" page={Home} auth />
             <Route path="/login" page={Login} guest />
             <Route path="/register" page={Register} />
             {/* <NestedRoute path="/users">

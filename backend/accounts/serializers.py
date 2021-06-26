@@ -4,6 +4,12 @@ from drives.models import Folder
 import os
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'last_name', 'first_name', 'id')
+
+
 class AccountSerializer(serializers.ModelSerializer):
     username = serializers.EmailField(max_length=255)
     password = serializers.CharField(

@@ -4,7 +4,6 @@ import FileTableRow from '../components/FileTableRow'
 import FolderTableRow from '../components/FolderTableRow'
 import Toolbar from '../components/partials/Toolbar'
 import Loader from '../components/controls/Loader'
-import { useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import { selectedDriveState } from '../store'
 
@@ -52,14 +51,14 @@ const afiles = [
         'created_at': '02/11/2021'
     }
 ]
-const Home = () => {
+const Home = (props) => {
     const [loading, setLoading] = React.useState([])
     const [folders, setFolders] = React.useState([])
     const [files, setFiles] = React.useState([])
     const setSelectedDrive = useSetRecoilState(selectedDriveState)
 
-    const location = useLocation();
-
+    // const location = useLocation();
+    console.log(props);
     React.useEffect(() => {
         setSelectedDrive()
         setLoading(true)
@@ -68,8 +67,8 @@ const Home = () => {
             setFiles(afiles)
             setLoading(false)
         }, 500)
-        console.log(location.pathname);
-    }, [location]);
+
+    }, []);
 
     return <MainLayout>
 

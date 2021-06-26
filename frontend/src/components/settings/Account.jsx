@@ -6,22 +6,22 @@ const AccountSettings = () => {
         <div className="flex">
             <div className="flex flex-col flex-1">
                 <label>Имя</label>
-                <td><input type="text" className="input" /></td>
+                <input type="text" className="input" />
             </div>
             <div className="flex flex-col flex-1" style={{ marginLeft: '10px' }}>
                 <label>Фамиля</label>
-                <td><input type="text" className="input" /></td>
+                <input type="text" className="input" />
             </div>
         </div>
 
         <div className="flex" style={{ marginTop: '20px' }} >
             <div className="flex flex-col flex-1">
                 <label>Электронная почта</label>
-                <td><input type="email" className="input" /></td>
+                <input type="email" className="input" />
             </div>
             <div className="flex flex-col flex-1" style={{ marginLeft: '10px' }}>
                 <label>Телефон</label>
-                <td><input type="text" className="input" /></td>
+                <input type="text" className="input" />
             </div>
         </div>
         <div className="flex" style={{ marginTop: '40px' }}>

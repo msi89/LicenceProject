@@ -37,7 +37,7 @@ const Sidebar = () => {
             </div>
             <ul className="sidebar-nav">
                 <li>
-                    <BaseLink to="/" exact className="sidebar-nav-item">
+                    <BaseLink to="/" exact className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             laptop
                         </span>
@@ -45,7 +45,7 @@ const Sidebar = () => {
                     </BaseLink>
                 </li>
                 <li>
-                    <BaseLink to="/recents" className="sidebar-nav-item">
+                    <BaseLink to="/recents" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             history
                         </span>
@@ -53,7 +53,7 @@ const Sidebar = () => {
                     </BaseLink>
                 </li>
                 <li>
-                    <BaseLink to="/shared" className="sidebar-nav-item">
+                    <BaseLink to="/shared" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             folder_shared
                         </span>
@@ -61,7 +61,7 @@ const Sidebar = () => {
                     </BaseLink>
                 </li>
                 <li>
-                    <BaseLink to="/favorites" className="sidebar-nav-item">
+                    <BaseLink to="/favorites" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             star_purple500
                         </span>
@@ -69,7 +69,7 @@ const Sidebar = () => {
                     </BaseLink>
                 </li>
                 <li>
-                    <BaseLink to="/trash" className="sidebar-nav-item">
+                    <BaseLink to="/trash" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             delete_outline
                         </span>

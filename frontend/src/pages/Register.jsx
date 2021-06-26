@@ -2,43 +2,45 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../components/controls/Button'
 import { BaseLink } from '../components/partials/NavItem'
+import { useFormik } from "formik";
+import { registerValidationSchema } from '../helpers/validators';
+
+
 
 const Register = () => {
 
     const [loading, setLoading] = React.useState(false)
-    const [formData, setFormData] = React.useState({
-        name: '',
-        email: '',
-        password: '',
-        confirm_password: ''
-    })
+    const [error, setError] = React.useState()
+    const formik = useFormik({
+        initialValues: {
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            password_confirm: "",
 
-    const HandleChange = (e) => {
-        const { name, value } = e.target
-        if (name === 'name') {
-            setFormData({ ...formData, name: value })
-        }
-        if (name === 'email') {
-            setFormData({ ...formData, email: value })
-        }
-        if (name === 'password') {
-            setFormData({ ...formData, password: value })
-        }
-        if (name === 'confirm_password') {
-            setFormData({ ...formData, confirm_password: value })
-        }
-    }
-
-    const HandleClick = () => {
-        console.log(formData);
-        if (!loading) {
-            setLoading(true)
-        }
-    }
+        },
+        validationSchema: registerValidationSchema,
+        onSubmit: async (values) => {
+            // const response = await authService.login({
+            //     email: values.email,
+            //     password: values.password,
+            //     device_name: navigator.appName
+            // })
+            // if (response.error) {
+            //     toast.error(response.data.error);
+            // } else {
+            //     setIsAuth(true)
+            //     setAuthUser(response.data)
+            //     toast.success("Login successfully!");
+            //     redirect()
+            // }
+        },
+    });
 
     return <Wrapper>
         <div className="login">
-            <div className="flex flex-col login-form">
+            <form className="flex flex-col login-form" onSubmit={formik.handleSubmit}>
                 <div className="brand-logo flex items-center">
                     <div className="logo">
                         <svg enableBackground="new 0 0 503.589 503.589"
@@ -53,52 +55,81 @@ const Register = () => {
                 </div>
                 <div className="flex flex-col">
                     <div className="flex justify-center">
-                        <h1 className="login-heading">Вход</h1>
+                        <h1 className="login-heading">Регистрация</h1>
+                    </div>
+                    {error && <div className="error-panel">
+                        <p>{error}</p>
+                    </div>}
+                    <div className="input-group">
+                        <input type="text" className="input"
+                            placeholder="Фамиля"
+                            name="lastname"
+                            value={formik.values.lastname}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.errors.lastname && formik.touched.lastname && (
+                            <small className="text-error">{formik.errors.lastname}</small>
+                        )}
                     </div>
                     <div className="input-group">
                         <input type="text" className="input"
-                            placeholder="Адрес эл. почты"
-                            onChange={HandleChange}
-                            name="name"
-                            value={formData.name}
-                            required
+                            placeholder="Имя"
+                            name="firstname"
+                            value={formik.values.firstname}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.firstname && formik.touched.firstname && (
+                            <small className="text-error">{formik.errors.firstname}</small>
+                        )}
                     </div>
                     <div className="input-group">
                         <input type="email" className="input"
                             placeholder="Адрес эл. почты"
-                            onChange={HandleChange}
                             name="email"
-                            value={formData.email}
-                            required
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.email && formik.touched.email && (
+                            <small className="text-error">{formik.errors.email}</small>
+                        )}
                     </div>
                     <div className="input-group">
-                        <input type="password" className="input" placeholder="Пароль"
-                            onChange={HandleChange}
+                        <input type="password" className="input"
+                            placeholder="Пароль"
                             name="password"
-                            value={formData.password}
-                            required
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.password && formik.touched.password && (
+                            <small className="text-error">{formik.errors.password}</small>
+                        )}
                     </div>
                     <div className="input-group">
                         <input type="password" className="input"
                             placeholder="Подтвердить пароль"
-                            onChange={HandleChange}
-                            name="confirm_password"
-                            value={formData.confirm_password}
-                            required
+                            name="password_confirm"
+                            value={formik.values.password_confirm}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.password_confirm && formik.touched.password_confirm && (
+                            <small className="text-error">{formik.errors.password_confirm}</small>
+                        )}
                     </div>
                     <div className="alt-link flex justify-end">
                         <div>У вас есть аккаунт?<BaseLink to="/login" >Войдите!</BaseLink></div>
                     </div>
                     <div className="input-group flex flex-col">
-                        <Button className="btn btn-primary w-full" loading={loading}
-                            onClick={HandleClick}>Создать аккаунт</Button>
+                        <Button className="btn btn-primary w-full"
+                            loading={loading}
+                        >Создать аккаунт</Button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </Wrapper>
 }
@@ -117,7 +148,7 @@ const Wrapper = styled.div`
 }
 .login-form{
    width: 400px;
-   height: 450px;
+   height: 500px;
    background: #fff;
    padding: 30px;
    --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -142,6 +173,15 @@ box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #
 }
 .alt-link a:hover{
     text-decoration: underline
+}
+.error-panel{
+    background: #f1b5b5;
+    padding: 10px;
+    font-size: 10px;
+}
+.text-error{
+    font-size: 10px;
+    color: crimson;
 }
 `
 export default Register

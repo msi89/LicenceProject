@@ -2,16 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 
-const Button = ({ children, className, onClick, disabled = false, loading = false, style }) => {
-    return <button className={className} onClick={onClick} disabled={disabled} style={style}>
-        {loading ? <Wrapper>
-            <span className="btn-loading">
-                <span>&bull;</span>
-                <span>&bull;</span>
-                <span>&bull;</span>
-            </span>
-        </Wrapper> : <>{children}</>}
-    </button>
+const Button = ({ children, className, type = "button", onClick, disabled = false, loading = false, style }) => {
+	return <button className={className} onClick={onClick} disabled={disabled} style={style} type={type}>
+		{loading ? <Wrapper>
+			<span className="btn-loading">
+				<span>&bull;</span>
+				<span>&bull;</span>
+				<span>&bull;</span>
+			</span>
+		</Wrapper> : <>{children}</>}
+	</button>
 }
 
 

@@ -1,11 +1,29 @@
+import { navigate } from '@reach/router'
 import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { authUserState } from '../../store'
+import useAuthUser from '../../store/actions/auth'
+import Storage from '../../store/local'
 import Dropdown from '../controls/Dropdown'
 import { MainContext } from '../layouts/Main'
 
 
 const Topbar = () => {
 
+    const authUser = useRecoilValue(authUserState)
+    const { logout } = useAuthUser()
+
     const { settingsModal } = React.useContext(MainContext)
+
+    // React.useEffect(() => {
+    //     me()
+    //     console.log('user', authUser);
+    // }, [])
+
+    const handleLogout = () => {
+        Storage.reset()
+        navigate('/login')
+    }
 
     return <div className="topbar">
         <div className="search-box">
@@ -28,11 +46,11 @@ const Topbar = () => {
 
             <Dropdown>
                 <Dropdown.Button className="profile">
-                    <span>Jessica</span>
+                    <span>{authUser?.firstname || authUser?.lastname}</span>
                     <div className="shape-rounded center">J</div>
                 </Dropdown.Button>
                 <Dropdown.Content className="dropdown">
-                    <Dropdown.Item className="dropdown-item flex">
+                    <Dropdown.Item className="dropdown-item flex" onClick={handleLogout}>
                         <span style={{ marginLeft: '5px', fontSize: '13px' }}>Выити</span>
                     </Dropdown.Item>
                 </Dropdown.Content>

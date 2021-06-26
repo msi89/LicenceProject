@@ -2,35 +2,43 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../components/controls/Button'
 import { BaseLink } from '../components/partials/NavItem'
+import { useFormik } from "formik";
+import { loginValidationSchema } from '../helpers/validators';
+import { useQuery } from '../hooks/useQuery';
+import { navigate } from '@reach/router';
+import useAuthUser from '../store/actions/auth';
 
 const Login = () => {
+    const { query } = useQuery()
+    const [error, setError] = React.useState()
+    const { loading, login, me } = useAuthUser()
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: loginValidationSchema,
+        onSubmit: async (values) => {
+            setError("")
+            const rep = await login(values)
+            if (rep.error) {
+                setError("Неверный адрес электронной почты или пароль")
+            } else {
+                formik.resetForm()
+                await me()
+                redirect()
+            }
+        },
+    });
 
-    const [loading, setLoading] = React.useState(false)
-    const [formData, setFormData] = React.useState({
-        email: '',
-        password: ''
-    })
-
-    const HandleChange = (e) => {
-        const { name, value } = e.target
-        if (name === 'email') {
-            setFormData({ ...formData, email: value })
-        }
-        if (name === 'password') {
-            setFormData({ ...formData, password: value })
-        }
-    }
-
-    const HandleClick = () => {
-        console.log(formData);
-        if (!loading) {
-            setLoading(true)
-        }
+    function redirect() {
+        const path = query.get('redirect') || -1
+        navigate(path)
     }
 
     return <Wrapper>
         <div className="login">
-            <div className="flex flex-col login-form">
+            <form className="flex flex-col login-form" onSubmit={formik.handleSubmit}>
                 <div className="brand-logo flex items-center">
                     <div className="logo">
                         <svg enableBackground="new 0 0 503.589 503.589"
@@ -47,22 +55,32 @@ const Login = () => {
                     <div className="flex justify-center">
                         <h1 className="login-heading">Вход</h1>
                     </div>
+                    {error && <div className="error-panel">
+                        <p>{error}</p>
+                    </div>}
                     <div className="input-group">
                         <input type="text" className="input"
                             placeholder="Адрес эл. почты"
-                            onChange={HandleChange}
                             name="email"
-                            value={formData.email}
-                            required
+                            value={formik.values.email}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.email && formik.touched.email && (
+                            <small className="text-error">{formik.errors.email}</small>
+                        )}
                     </div>
                     <div className="input-group">
-                        <input type="password" className="input" placeholder="Пароль"
-                            onChange={HandleChange}
+                        <input type="password" className="input"
+                            placeholder="Пароль"
                             name="password"
-                            value={formData.password}
-                            required
+                            value={formik.values.password}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                         />
+                        {formik.errors.password && formik.touched.password && (
+                            <small className="text-error">{formik.errors.password}</small>
+                        )}
                     </div>
                     <div className="alt-link  flex flex-col">
                         <div>
@@ -70,11 +88,12 @@ const Login = () => {
                         </div>
                     </div>
                     <div className="input-group flex flex-col">
-                        <Button className="btn btn-primary w-full" loading={loading}
-                            onClick={HandleClick}>Войти</Button>
+                        <Button className="btn btn-primary w-full" type="submit"
+                            loading={loading}
+                        >Войти</Button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </Wrapper>
 }
@@ -119,6 +138,16 @@ box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #
 }
 .alt-link a:hover{
     text-decoration: underline
+}
+.error-panel{
+    background: #f1b5b5;
+    padding: 10px;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+.text-error{
+    font-size: 10px;
+    color: crimson;
 }
 `
 export default Login
