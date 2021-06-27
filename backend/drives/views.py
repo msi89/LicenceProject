@@ -1,10 +1,11 @@
 from core.contrib.helpers import FileSystem
 from .serializers import (
-    DocumentSerializer, FolderSerializer, UploadSerializer, CreateFoldetSerializer)
+    DocumentSerializer, FolderSerializer, UploadSerializer,
+    CreateFoldetSerializer, DownloadSerializer, UpdateFileSerializer)
 from rest_framework import serializers, viewsets, status, mixins
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
+from django.http import FileResponse
 from .models import Document, Folder
 from rest_framework.decorators import action
 import os
@@ -36,10 +37,12 @@ class FolderViewSet(viewsets.ModelViewSet):
             parent = Folder.objects.filter(id=form.data.get(
                 'parent'), owner=request.user).first()
             if parent:
-                print('p', parent.path)
-                print('name', form.data.get('name'))
-                path = os.path.join(parent.path, form.data.get('name'))
-                # replace(' ', '_')
+                path = os.path.join(
+                    parent.path, form.data.get('name')).replace(' ', '_')
+                abs_path = os.path.join(os.getcwd(), 'media', path)
+                if os.path.exists(abs_path):
+                    return Response({'detail': 'Каталог уже существует'}, 400)
+                os.makedirs(abs_path)
                 result['path'] = path
                 result['name'] = form.data.get('name')
                 result['parent'] = parent.id
@@ -61,7 +64,6 @@ class FolderViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         folder = self.get_queryset().filter(pk=pk,
                                             owner=request.user, is_deleted=False).first()
-        print('folder', folder)
         if folder:
             if folder.name != '/':
                 folder.is_deleted = True
@@ -69,16 +71,21 @@ class FolderViewSet(viewsets.ModelViewSet):
                 folder.save()
             return Response({}, 204)
         else:
-            return Response({'detail': 'Folder not found'}, 404)
+            return Response({'detail': 'Папка не найдена'}, 404)
+
+    @action(detail=False, methods=['get'])
+    def trash(self, request):
+        queryset = self.get_queryset(owner=request.user, is_deleted=True)
+        serializer = FolderSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
-class DocumentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
+class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
 
     def list(self, request):
-        queryset = self.get_queryset(owner=request.user)
+        queryset = self.get_queryset().filter(owner=request.user)
         serializer = DocumentSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -88,7 +95,44 @@ class DocumentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
         serializer = DocumentSerializer(doc)
         return Response(serializer.data)
 
-    @ action(detail=False, methods=['post'])
+    def partial_update(self, request, pk=None):
+        form = UpdateFileSerializer(data=request.data)
+        if form.is_valid():
+            doc = self.get_queryset().filter(
+                pk=pk,
+                owner=request.user,
+                is_deleted=False).first()
+            if doc:
+                encrypted = form.data.get('encrypted')
+                decrypted = form.data.get('decrypted')
+                name = form.data.get('name')
+                directory = form.data.get('directory')
+
+                if name is not None:
+                    doc.name = name
+                if directory is not None:
+                    doc.directory = directory
+                if encrypted is not None:
+                    filepath = os.path.join(os.getcwd(), doc.path)
+                    FileSystem().encode(filepath, form.data.get('password', ''))
+                    doc.path = doc.path.replace('.aes', '')
+                    doc.url = doc.url.replace('.aes', '')
+                    doc.is_private = True
+                if decrypted is not None:
+                    filepath = os.path.join(os.getcwd(), doc.path)
+                    FileSystem().decode(filepath, form.data.get('password', ''), True)
+                    doc.path = os.path.splitext(doc.path)[0]
+                    doc.url = os.path.splitext(doc.url)[0]
+                    doc.is_private = False
+                doc.save()
+                return Response({}, 204)
+            else:
+                return Response({'detail': 'Файл не найден'}, 404)
+        else:
+            return Response(form.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'])
     def upload(self, request):
         form = UploadSerializer(data=request.data)
         if form.is_valid():
@@ -105,12 +149,15 @@ class DocumentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
 
             password = request.POST.get('password', None)
             file = request.FILES['file']
-            result = FileSystem().save_file(
-                file, f'media/documents/{directory.path}', password)
+            filename = file.name
+            result = FileSystem().upload(
+                file, f'media/{directory.path}', password)
+            result['path'] = result['url']
             result['url'] = "http://{}/{}".format(
                 request.get_host(), result['url'])
             result['owner'] = request.user.id
             result['directory'] = directory.id
+            result['name'] = filename
             serializer = DocumentSerializer(data=result)
             if serializer.is_valid():
                 serializer.save()
@@ -123,4 +170,39 @@ class DocumentViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        pass
+        doc = self.get_queryset().filter(pk=pk,
+                                         owner=request.user,
+                                         is_deleted=False).first()
+        if doc:
+            doc.is_deleted = True
+            doc.deleted_at = date.today()
+            doc.save()
+            return Response({}, 204)
+        else:
+            return Response({'detail': 'Папка не найдена'}, 404)
+
+    @action(detail=False, methods=['get'])
+    def trash(self, request):
+        queryset = self.get_queryset().filter(owner=request.user, is_deleted=True)
+        serializer = DocumentSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def download(self, request, pk=None):
+        form = DownloadSerializer(data=request.data)
+        if not form.is_valid():
+            return Response(form.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+        doc = self.get_queryset().filter(
+            owner=request.user, is_deleted=False, pk=pk).first()
+        if doc is None:
+            return Response({'detail': 'Файл не найден'}, 404)
+        filepath = os.path.join(os.getcwd(), doc.path)
+        path = FileSystem().decode(filepath, form.data.get('password', ''))
+        if os.path.exists(path):
+            response = FileResponse(open(path, 'rb'))
+            # if os.path.exists(filepath):
+            #     os.remove(path)
+            return response
+        else:
+            return Response({'detail': 'invalid password'}, 400)

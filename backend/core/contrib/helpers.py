@@ -16,7 +16,7 @@ class FileSystem:
         tmp = "{}({}){}".format(path.stem, self.file_name_index, path.suffix)
         return self.normalize_file_name(outdir, tmp)
 
-    def save_file(self, file, outdir, password=None):
+    def upload(self, file, outdir, password=None):
         path = os.path.join(os.getcwd(), outdir, file.name.replace(" ", "_"))
         if not os.path.exists(os.path.join(os.getcwd(), outdir)):
             print('folder created')
@@ -32,3 +32,10 @@ class FileSystem:
         # data['path'] = abs_name
         data['url'] = "/".join(splited_path[splited_path.index('media'):])
         return data
+
+    def encode(self, path, password):
+        return AESCrypt().encrypt(path, password)
+
+    def decode(self, path, password, delet=False):
+        AESCrypt().decrypt(path, password, remove_src=delet)
+        return os.path.splitext(path)[0]

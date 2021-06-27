@@ -15,7 +15,9 @@ const Settings = () => {
             <div className={`tab_header_item ${tab === 1 ? 'active' : ''}`} onClick={() => handleTabClick(1)}>Advanced</div>
         </div>
         <div className="content px-2">
-            {tab === 0 && <AccountSettings />}
+            {tab === 0 && <div>
+                {/* <AccountSettings /> */}
+            </div>}
             {tab === 1 && <AdvanceSettings />}
         </div>
     </div>
@@ -28,7 +30,7 @@ const Wrapper = styled.div`
   background: #fff;
 }
 .tab__header{
-  background: #c5c3c3;
+  /* background: #c5c3c3; */
   display: flex;
   border-bottom: 1px solid #ccc;
 }

@@ -1,15 +1,17 @@
+from os import name, path
 from rest_framework import serializers
 from .models import Document, Folder
-from core.contrib.serializers import FolderRelatedField, FileRelatedField
+from core.contrib.serializers import FolderRelatedField, FileRelatedField, ParentRelatedField
 
 
 class FolderSerializer(serializers.ModelSerializer):
     children = FolderRelatedField(many=True, read_only=True)
     documents = FileRelatedField(many=True, read_only=True)
+    # parent = ParentRelatedField(read_only=True)
 
     class Meta:
         model = Folder
-        fields = ('id', 'name', 'parent', 'children',
+        fields = ('id', 'uuid', 'name', 'parent', 'children', 'path',
                   'is_private', 'documents', 'owner', 'created_at', 'updated_at', 'is_deleted', 'deleted_at')
 
 
@@ -39,17 +41,21 @@ class UploadSerializer(serializers.Serializer):
         return super().validate(attrs)
 
 
+class DownloadSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=200, required=False)
+
+
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         # fields = '__all__'
-        fields = ['id', 'name', 'size', 'is_private', 'owner', 'url',
+        fields = ['id', 'name', 'size', 'is_private', 'owner', 'url', 'path',
                   'directory', 'created_at', 'updated_at']
 
-    def create(self, validated_data: dict):
-        doc = Document(**validated_data)
-        # request = self.context.get("request")
-        # if request and hasattr(request, "user"):
-        #     doc.owner = request.user
-        doc.save()
-        return doc
+
+class UpdateFileSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=200, required=False)
+    password = serializers.CharField(max_length=200, required=False)
+    directory = serializers.IntegerField(required=False)
+    encrypted = serializers.BooleanField(required=False)
+    decrypted = serializers.BooleanField(required=False)

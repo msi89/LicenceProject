@@ -11,19 +11,22 @@ export const onUploadState = atom({
     default: false
 });
 
-export const breadcrumbs = atom({
+export const breadcrumbState = atom({
     key: "breadcrumbs-state",
-    default: ["/"],
+    default: [],
 });
 
 export const currentFolderState = atom({
     key: "current-folder-state",
-    default: '/'
+    default: {
+        children: [],
+        documents: []
+    }
 });
 
 export const uploadPasswordState = atom({
     key: "upload-password-state",
-    default: null
+    default: storage.get('password') || '80257'
 });
 
 export const isAuthState = atom({

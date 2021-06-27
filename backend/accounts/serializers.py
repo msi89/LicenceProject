@@ -34,5 +34,5 @@ class AccountSerializer(serializers.ModelSerializer):
             validate_data['username'] = validate_data['email']
         user = User.objects.create_user(**validate_data)
         Folder.objects.create(name='/', owner=user, path=str(user.id))
-        os.makedirs(os.path.join(os.getcwd(), str(user.id)))
+        os.makedirs(os.path.join(os.getcwd(), 'media', str(user.id)))
         return user

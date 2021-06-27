@@ -3,11 +3,39 @@ import styled from 'styled-components'
 import Icon from './controls/Icon'
 import ProgressLine from './controls/ProgressLine'
 import { getFileIcon } from '../helpers'
+import useDrives from '../store/actions/drives'
+import Storage from '../store/local'
+import api from '../helpers/api'
 
 const Uploader = ({ file }) => {
 
     const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState("error survenue")
+    const [error, setError] = React.useState()
+    const { currentFolder, getFolder } = useDrives()
+
+    React.useEffect(() => {
+        syncToServer()
+    }, [file])
+
+    const syncToServer = async () => {
+        setLoading(true)
+        if (file) {
+            const form = new FormData()
+            form.append('file', file)
+            form.append('directory', currentFolder.id)
+            form.append('password', Storage.get('password'))
+
+            try {
+                await api.post('drives/documents/upload/', form)
+                await getFolder(currentFolder.id)
+            } catch (err) {
+                setError('Не удалось загрузить файл. Пожалуйста, попробуйте еще раз!')
+            }
+            finally {
+                setLoading(false)
+            }
+        }
+    }
 
     return <Wrapper>
         <div className="uploader">
@@ -17,10 +45,9 @@ const Uploader = ({ file }) => {
                     <span style={{ marginLeft: '10px' }}> {file?.name}</span>
                 </div>
                 <div>
-                    {loading && <button className="btn b-icon" style={{ background: 'crimson', color: '#fff' }}>
+                    {loading ? <button className="btn b-icon" style={{ background: 'crimson', color: '#fff' }}>
                         <Icon name="x" size={16} />
-                    </button>}
-                    {error ? <button className="btn b-icon" style={{ color: '#2262C6' }}>
+                    </button> : error ? <button className="btn b-icon" style={{ color: '#2262C6' }}>
                         <Icon name="refresh" size={20} />
                     </button> :
                         <button className="btn b-icon" style={{ background: '#03a803', color: '#fff' }}>

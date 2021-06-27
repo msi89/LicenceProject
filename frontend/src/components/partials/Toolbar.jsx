@@ -6,6 +6,7 @@ import Dropdown from '../controls/Dropdown'
 import Modal from '../controls/Modal'
 import Button from '../controls/Button'
 import { MainContext } from '../layouts/Main'
+import useDrives, { useCreateFolder } from '../../store/actions/drives'
 
 const Toolbar = () => {
 
@@ -13,8 +14,9 @@ const Toolbar = () => {
     const folderModal = React.useRef()
     const inputFile = React.useRef()
     const [newFolder, setNewFolder] = React.useState("")
-    const [loading, setLoading] = React.useState(false)
     const { uploadModal, setDropFiles } = React.useContext(MainContext)
+    const { createFolder, loading } = useCreateFolder()
+    const { currentFolder, getFolder } = useDrives()
 
     const handleFolderChange = (e) => {
         setNewFolder(e.target.value)
@@ -25,10 +27,14 @@ const Toolbar = () => {
         uploadModal.current.open()
     }
 
-    const handleSaveFolder = () => {
-        if (!loading) {
-            setLoading(true)
-        }
+    const handleSaveFolder = async () => {
+        await createFolder({
+            name: newFolder,
+            parent: currentFolder.id
+        })
+        folderModal.current.close()
+        await getFolder(currentFolder.id)
+        setNewFolder('')
     }
 
     return <>
@@ -56,7 +62,7 @@ const Toolbar = () => {
                 <span style={{ margin: '0 2px' }}>Загрузить</span>
             </button>
             {selectedDrive?.id && <div className="flex">
-                <button className="btn">
+                {/* <button className="btn">
                     <Icon name="download" className="text-primary" size={18} />
                     <span style={{ margin: '0 2px' }}>Скачать</span>
                 </button>
@@ -71,7 +77,7 @@ const Toolbar = () => {
                 <button className="btn">
                     <Icon name="trash" className="text-primary" size={18} />
                     <span style={{ margin: '0 2px' }}>Удалить</span>
-                </button>
+                </button> */}
             </div>}
 
         </div>

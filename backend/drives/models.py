@@ -1,6 +1,8 @@
 from django.db import models
+from django.db.models.fields import UUIDField
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.auth.models import User
+import uuid
 
 
 def upload_to_dir(instance, filename):
@@ -10,6 +12,7 @@ def upload_to_dir(instance, filename):
 
 class Folder(MPTTModel):
     id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=50)
     path = models.CharField(max_length=255, null=True, blank=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE,
@@ -28,11 +31,21 @@ class Folder(MPTTModel):
     def __str__(self):
         return self.name
 
+    # def tree(self, folder_id):
+    #     if folder_id is None:
+    #         return []
+    #     category = Folder.objects.get(pk=folder_id)
+    #     result = self.tree(category.parent_id)
+    #     result.append(category)
+    #     return result
+
 
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=255, null=True, blank=True)
     size = models.IntegerField(default=0)
+    path = models.CharField(max_length=255, null=True, blank=True)
     url = models.URLField(max_length=255, null=True, blank=True)
     directory = models.ForeignKey(
         Folder, related_name='documents', on_delete=models.CASCADE, null=True, blank=True)
@@ -46,4 +59,4 @@ class Document(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.content.name
+        return self.name

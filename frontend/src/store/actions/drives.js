@@ -1,17 +1,19 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import api from '../../helpers/api'
 import { useState } from 'react'
+import { currentFolderState } from '..';
+import { toast } from '../../helpers';
 
 
 export const useDrives = () => {
     const [loading, setLoading] = useState(false);
-    const [] = useRecoilState()
+    const [currentFolder, setFolder] = useRecoilState(currentFolderState)
 
-    const login = async (credentials) => {
+    const fetchCWD = async () => {
         try {
             setLoading(true)
-            const response = await api.post("/auth/token/login", credentials);
-            Storage.set("token", response.data.auth_token);
+            const response = await api.get("/drives/directories/cwd/");
+            setFolder(response.data)
             return api.format(response);
         } catch (error) {
             return api.format(error.response, true);
@@ -20,10 +22,11 @@ export const useDrives = () => {
         }
     }
 
-    const register = async (credentials) => {
+    const getFolder = async (folderId) => {
         try {
             setLoading(true)
-            const response = await api.post("/auth/users/", credentials);
+            const response = await api.get(`/drives/directories/${folderId}`);
+            setFolder(response.data)
             return api.format(response);
         } catch (error) {
             return api.format(error.response, true);
@@ -32,40 +35,43 @@ export const useDrives = () => {
         }
     }
 
-    const me = async () => {
+    const deleteFolder = async (folderId) => {
         try {
-            setLoading(true)
-            const response = await api.get("/auth/users/me");
-            Storage.set('user', response.data)
-            setAuthUser(response.data)
+            const response = await api.delete(`/drives/directories/${folderId}`);
             return api.format(response);
         } catch (error) {
             return api.format(error.response, true);
-        } finally {
-            setLoading(false)
         }
     }
 
-    const logout = async () => {
+    return {
+        loading,
+        currentFolder,
+        fetchCWD,
+        getFolder,
+        deleteFolder
+    }
+}
+
+
+export const useCreateFolder = () => {
+    const [loading, setLoading] = useState(false);
+
+    const createFolder = async (payload) => {
         try {
             setLoading(true)
-            const response = await api.post("/auth/token/logout");
-            Storage.reset()
-            return api.format(response);
+            const response = await api.post("/drives/directories/", payload);
         } catch (error) {
-            return api.format(error.response, true);
+            console.log(error.response);
+            toast.error(error.response?.data.detail || 'Ошибка сервера, попробуйте позже')
         } finally {
             setLoading(false)
         }
     }
 
     return {
-        login,
-        me,
         loading,
-        logout,
-        register,
-        isAuthenticated
+        createFolder
     }
 }
 
