@@ -22,6 +22,8 @@ export const useDrives = () => {
         }
     }
 
+
+
     const getFolder = async (folderId) => {
         try {
             setLoading(true)
@@ -50,6 +52,47 @@ export const useDrives = () => {
         fetchCWD,
         getFolder,
         deleteFolder
+    }
+}
+
+
+export const useTrash = () => {
+    const [loading, setLoading] = useState(false);
+    const [deletedFolder, setDeletedFolder] = useState([]);
+    const [deletedFiles, setDeletedFiles] = useState([]);
+
+    const fetchDeletedFolders = async () => {
+        try {
+            setLoading(true)
+            const response = await api.get("/drives/directories/trash/");
+            setDeletedFolder(response.data)
+            return api.format(response);
+        } catch (error) {
+            return api.format(error.response, true);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const fetchDeletedFiles = async () => {
+        try {
+            setLoading(true)
+            const response = await api.get("/drives/documents/trash/");
+            setDeletedFiles(response.data)
+            return api.format(response);
+        } catch (error) {
+            return api.format(error.response, true);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return {
+        fetchDeletedFolders,
+        deletedFolder,
+        fetchDeletedFiles,
+        deletedFiles,
+        loading
     }
 }
 

@@ -32,7 +32,7 @@ const Sidebar = () => {
 
                 <button className="btn button-upload-file"
                     onClick={() => inputFile.current.click()}>
-                    Upload new file
+                    Загрузить новый файл
                 </button>
             </div>
             <ul className="sidebar-nav">
@@ -41,31 +41,31 @@ const Sidebar = () => {
                         <span className="material-icons">
                             laptop
                         </span>
-                        <span>Computer</span>
+                        <span>Файлы</span>
                     </BaseLink>
                 </li>
-                <li>
+                {/* <li>
                     <BaseLink to="/recents" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             history
                         </span>
                         <span>Recents</span>
                     </BaseLink>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                     <BaseLink to="/shared" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             folder_shared
                         </span>
                         <span>Shared</span>
                     </BaseLink>
-                </li>
+                </li> */}
                 <li>
                     <BaseLink to="/favorites" className="sidebar-nav-item" activeClass="active">
                         <span className="material-icons">
                             star_purple500
                         </span>
-                        <span>Favorites</span>
+                        <span>Избранные файлы</span>
                     </BaseLink>
                 </li>
                 <li>
@@ -73,7 +73,7 @@ const Sidebar = () => {
                         <span className="material-icons">
                             delete_outline
                         </span>
-                        <span>Trash</span>
+                        <span>Корзина</span>
                     </BaseLink>
                 </li>
             </ul>

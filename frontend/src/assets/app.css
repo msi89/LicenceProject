@@ -304,7 +304,7 @@ a{
 }
 .toolbar{
   border-bottom: 1px solid #eee;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 .toolbar .btn{
   display: flex;
@@ -356,6 +356,7 @@ a{
   width: 100%;
 }
 .dropdown{
+  z-index: 9;
   position: absolute;
   min-width: 150px;
   background-color: #ffffff;

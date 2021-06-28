@@ -8,11 +8,24 @@ class FolderSerializer(serializers.ModelSerializer):
     children = FolderRelatedField(many=True, read_only=True)
     documents = FileRelatedField(many=True, read_only=True)
     # parent = ParentRelatedField(read_only=True)
+    # foo = serializers.SerializerMethodField()
+    # tree = serializers.SerializerMethodField()
 
     class Meta:
         model = Folder
         fields = ('id', 'uuid', 'name', 'parent', 'children', 'path',
                   'is_private', 'documents', 'owner', 'created_at', 'updated_at', 'is_deleted', 'deleted_at')
+
+    def get_foo(self, obj):
+        return "Foo id: %i" % obj.pk
+
+    # def get_tree(self, obj):
+    #     if obj is None:
+    #         return []
+    #     folder = Folder.objects.get(pk=obj.id)
+    #     result = self.get_tree(folder.parent_id)
+    #     result.append(folder)
+    #     return result
 
 
 class CreateFoldetSerializer(serializers.Serializer):
@@ -49,7 +62,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
         # fields = '__all__'
-        fields = ['id', 'name', 'size', 'is_private', 'owner', 'url', 'path',
+        fields = ['id', 'name', 'size', 'is_private', 'is_favorite', 'owner', 'url', 'path',
                   'directory', 'created_at', 'updated_at']
 
 

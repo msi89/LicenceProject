@@ -1529,6 +1529,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@msic89/toastly@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@msic89/toastly/-/toastly-1.0.4.tgz#9bc6f8c0c175e13ac943d7b5309a5f13dbb31b20"
+  integrity sha512-NjNH8rvzqAbMuR+w0twug2krzKyXRA1YCqq62K+y7VEhmzfmmaqzpmQqQxG8cp2C4vN0x7nV1EUvnCm4uRg7OA==
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"

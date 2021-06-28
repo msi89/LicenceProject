@@ -4,12 +4,13 @@ import { breadcrumbState, selectedDriveState } from '../store'
 import Icon from './controls/Icon'
 import Dropdown from './controls/Dropdown'
 import useDrives from '../store/actions/drives'
+import useBreadCrumb from '../hooks/useBreadcrumb'
 
 const FolderTableRow = ({ folder }) => {
     const [selectedDrive, setSelectedDrive] = useRecoilState(selectedDriveState)
     const { getFolder, deleteFolder, currentFolder } = useDrives()
 
-    const [breadcrumbs, setBreadcrumb] = useRecoilState(breadcrumbState)
+    const { addToBreadCrumb } = useBreadCrumb()
 
     const handleClick = () => {
         if (selectedDrive && selectedDrive.uuid === folder.uuid)
@@ -20,25 +21,13 @@ const FolderTableRow = ({ folder }) => {
     }
 
     const handleDbClick = async () => {
-        // if (breadcrumbs.findIndex(c => c?.id === currentFolder?.id) === -1) {
-        //     const bcb = [...breadcrumbs]
-        //     bcb.push({
-        //         id: currentFolder?.id,
-        //         name: currentFolder?.name
-        //     })
-        //     setBreadcrumb(bcb)
-        // }
-
         await getFolder(folder.id)
-        setBreadcrumb({
-            id: currentFolder?.id,
-            name: currentFolder?.name
-        })
+        addToBreadCrumb(folder)
     }
 
     const handleDeleteClick = async () => {
         await deleteFolder(folder.id)
-        getFolder(currentFolder.id)
+        getFolder(folder.id)
     }
 
     return !folder?.is_deleted && <tr key={folder.id} onClick={handleClick}

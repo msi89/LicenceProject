@@ -5,12 +5,15 @@ import { navigate } from "@reach/router";
 
 const api = axios.create({
     baseURL: "http://localhost:8000/api",
+    // baseURL: "/api",
 });
 
 api.interceptors.request.use(
     function (config) {
         if (storage.exists("token")) {
             config.headers.common["Authorization"] = `Token ${storage.get("token")}`;
+            // config.headers.post['Access-Control-Allow-Origin'] = '*'
+            // config.headers.post['X-CSRFToken'] = storage.getCookie('csrftoken')
         }
         return config;
     },

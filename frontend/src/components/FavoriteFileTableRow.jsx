@@ -9,19 +9,9 @@ import Storage from '../store/local'
 import useDrives from '../store/actions/drives'
 
 
-const FileTableRow = ({ file }) => {
+const FavoriteFileTableRow = ({ file }) => {
 
-    const { downloadDoc, deleteDoc, updateDoc, } = useDocs()
-    const { getFolder } = useDrives()
-    const [selectedDrive, setSelectedDrive] = useRecoilState(selectedDriveState)
-
-    const handleClick = () => {
-        if (selectedDrive && selectedDrive.uuid === file.uuid)
-            setSelectedDrive()
-        else {
-            setSelectedDrive(file)
-        }
-    }
+    const { downloadDoc, deleteDoc, updateDoc, fetchFavoriteFiles } = useDocs()
 
     const handleDownload = async () => {
         await downloadDoc(file)
@@ -29,36 +19,23 @@ const FileTableRow = ({ file }) => {
 
     const handleDelete = async () => {
         await deleteDoc(file)
-        await getFolder(file?.directory)
+        await fetchFavoriteFiles()
     }
 
-    const handleEncrypt = async () => {
-        await updateDoc(file, {
-            encrypted: true,
-            password: Storage.get('password')
-        })
-        await getFolder(file?.directory)
-    }
 
     const handleLike = async () => {
         await updateDoc(file, { ...file, is_favorite: true })
-        await getFolder(file?.directory)
+        await fetchFavoriteFiles()
     }
 
     const handleDisLike = async () => {
         await updateDoc(file, { ...file, is_favorite: false })
-        await getFolder(file?.directory)
+        await fetchFavoriteFiles()
     }
 
-    const handleDecrypt = async () => {
-        await updateDoc(file, {
-            decrypted: true,
-            password: Storage.get('password')
-        })
-        await getFolder(file?.directory)
-    }
 
-    return !file?.is_deleted && <tr key={file.id} onClick={handleClick} className={file?.uuid === selectedDrive?.uuid ? 'selected' : ''}>
+
+    return <tr key={file.id}>
         <td></td>
         <td>
             <div className="flex items-center  cursor-pointer">
@@ -89,8 +66,6 @@ const FileTableRow = ({ file }) => {
                         <Icon name="download" className="text-primary" size={18} />
                         <span style={{ margin: '0 2px' }}>Скачать</span>
                     </Dropdown.Item>
-
-
                     {file?.is_favorite ? <Dropdown.Item className="dropdown-item flex" onClick={handleDisLike}>
                         <Icon name="love_fill" className="text-primary" size={18} />
                         <span style={{ margin: '0 2px' }}>Удалить из избранных</span>
@@ -98,16 +73,6 @@ const FileTableRow = ({ file }) => {
                         <Icon name="love" className="text-primary" size={18} />
                         <span style={{ margin: '0 2px' }}>Добавить в избранное</span>
                     </Dropdown.Item>}
-
-                    {/* {file.is_private ?
-                        <Dropdown.Item className="dropdown-item flex" onClick={handleEncrypt}>
-                            <Icon name="unlock" className="text-primary" size={18} />
-                            <span style={{ margin: '0 2px' }}>Расшифровать</span>
-                        </Dropdown.Item> : <Dropdown.Item className="dropdown-item flex"
-                            onClick={handleDecrypt}>
-                            <Icon name="lock" className="text-primary" size={18} />
-                            <span style={{ margin: '0 2px' }}>Зашифровать</span>
-                        </Dropdown.Item>} */}
                     <Dropdown.Item className="dropdown-item flex" onClick={handleDelete}>
                         <Icon name="trash" className="text-primary" size={18} />
                         <span style={{ margin: '0 2px' }}>Удалить</span>
@@ -118,4 +83,4 @@ const FileTableRow = ({ file }) => {
     </tr>
 }
 
-export default FileTableRow
+export default FavoriteFileTableRow

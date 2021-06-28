@@ -7,6 +7,19 @@ import Storage from "../local";
 
 export const useDocs = () => {
     const [loading, setLoading] = useState(false);
+    const [favoriteFiles, setFavoriteFiles] = useState([]);
+
+    const fetchFavoriteFiles = async () => {
+        try {
+            setLoading(true)
+            const res = await api.get(`/drives/documents/favorites/`);
+            setFavoriteFiles(res.data)
+        } catch (error) {
+            toast.error(error.response?.data.detail || 'Ошибка сервера, попробуйте позже')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const downloadDoc = async (payload) => {
         try {
@@ -60,7 +73,9 @@ export const useDocs = () => {
         loading,
         downloadDoc,
         updateDoc,
-        deleteDoc
+        deleteDoc,
+        fetchFavoriteFiles,
+        favoriteFiles
     }
 }
 

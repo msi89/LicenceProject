@@ -1,32 +1,28 @@
 import React from 'react'
-import MainLayout from '../components/layouts/Main'
-import FileTableRow from '../components/FileTableRow'
-import FolderTableRow from '../components/FolderTableRow'
-import Toolbar from '../components/partials/Toolbar'
-import Loader from '../components/controls/Loader'
+import MainLayout from '../../components/layouts/Main'
+import TrashFileTableRow from '../../components/TrashFileTableRow'
+import TrashFolderTableRow from '../../components/TrashFolderTableRow'
+import Loader from '../../components/controls/Loader'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { breadcrumbState, selectedDriveState } from '../store'
-import useDrives from '../store/actions/drives'
-import Breadcrumb from '../components/partials/Breadcrumb'
+import { selectedDriveState } from '../../store'
+import { useTrash } from '../../store/actions/drives'
 
 
-const Home = (props) => {
-    const { loading, fetchCWD, currentFolder } = useDrives()
+const Trash = (props) => {
+    const { loading, fetchDeletedFiles, fetchDeletedFolders, deletedFiles, deletedFolder } = useTrash()
     const setSelectedDrive = useSetRecoilState(selectedDriveState)
 
     React.useEffect(() => {
         setSelectedDrive()
-        fetchCWD()
+        fetchDeletedFolders()
+        fetchDeletedFiles()
     }, []);
 
 
     return <MainLayout>
 
         <div className="container">
-
             {loading ? <Loader template="dot" /> : <div>
-                <Toolbar />
-                <Breadcrumb />
                 <table className="table">
                     <thead>
                         <tr>
@@ -39,8 +35,8 @@ const Home = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentFolder?.children.map(folder => <FolderTableRow key={folder.id} folder={folder} />)}
-                        {currentFolder?.documents.map(file => <FileTableRow key={file.id} file={file} />)}
+                        {deletedFolder.map(folder => <TrashFolderTableRow key={folder.id} folder={folder} />)}
+                        {deletedFiles.map(file => <TrashFileTableRow key={file.id} file={file} />)}
                     </tbody>
                 </table>
             </div>
@@ -49,4 +45,4 @@ const Home = (props) => {
     </MainLayout>
 }
 
-export default Home
+export default Trash

@@ -75,7 +75,7 @@ class FolderViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def trash(self, request):
-        queryset = self.get_queryset(owner=request.user, is_deleted=True)
+        queryset = self.get_queryset().filter(owner=request.user, is_deleted=True)
         serializer = FolderSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -94,43 +94,6 @@ class DocumentViewSet(viewsets.ModelViewSet):
         doc = get_object_or_404(queryset, pk=pk)
         serializer = DocumentSerializer(doc)
         return Response(serializer.data)
-
-    def partial_update(self, request, pk=None):
-        form = UpdateFileSerializer(data=request.data)
-        if form.is_valid():
-            doc = self.get_queryset().filter(
-                pk=pk,
-                owner=request.user,
-                is_deleted=False).first()
-            if doc:
-                encrypted = form.data.get('encrypted')
-                decrypted = form.data.get('decrypted')
-                name = form.data.get('name')
-                directory = form.data.get('directory')
-
-                if name is not None:
-                    doc.name = name
-                if directory is not None:
-                    doc.directory = directory
-                if encrypted is not None:
-                    filepath = os.path.join(os.getcwd(), doc.path)
-                    FileSystem().encode(filepath, form.data.get('password', ''))
-                    doc.path = doc.path.replace('.aes', '')
-                    doc.url = doc.url.replace('.aes', '')
-                    doc.is_private = True
-                if decrypted is not None:
-                    filepath = os.path.join(os.getcwd(), doc.path)
-                    FileSystem().decode(filepath, form.data.get('password', ''), True)
-                    doc.path = os.path.splitext(doc.path)[0]
-                    doc.url = os.path.splitext(doc.url)[0]
-                    doc.is_private = False
-                doc.save()
-                return Response({}, 204)
-            else:
-                return Response({'detail': 'Файл не найден'}, 404)
-        else:
-            return Response(form.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['post'])
     def upload(self, request):
@@ -187,6 +150,13 @@ class DocumentViewSet(viewsets.ModelViewSet):
         serializer = DocumentSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def favorites(self, request):
+        queryset = self.get_queryset().filter(
+            owner=request.user, is_deleted=False, is_favorite=True)
+        serializer = DocumentSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'])
     def download(self, request, pk=None):
         form = DownloadSerializer(data=request.data)
@@ -206,3 +176,41 @@ class DocumentViewSet(viewsets.ModelViewSet):
             return response
         else:
             return Response({'detail': 'invalid password'}, 400)
+
+
+# def try_update():
+#     form = UpdateFileSerializer(data=request.data)
+#     if form.is_valid():
+#         doc = self.get_queryset().filter(
+#             pk=pk,
+#             owner=request.user,
+#             is_deleted=False).first()
+#         if doc:
+#             encrypted = form.data.get('encrypted')
+#             decrypted = form.data.get('decrypted')
+#             name = form.data.get('name')
+#             directory = form.data.get('directory')
+
+#             if name is not None:
+#                 doc.name = name
+#             if directory is not None:
+#                 doc.directory = directory
+#             if encrypted is not None:
+#                 filepath = os.path.join(os.getcwd(), doc.path)
+#                 FileSystem().encode(filepath, form.data.get('password', ''))
+#                 doc.path = doc.path.replace('.aes', '')
+#                 doc.url = doc.url.replace('.aes', '')
+#                 doc.is_private = True
+#             if decrypted is not None:
+#                 filepath = os.path.join(os.getcwd(), doc.path)
+#                 FileSystem().decode(filepath, form.data.get('password', ''), True)
+#                 doc.path = os.path.splitext(doc.path)[0]
+#                 doc.url = os.path.splitext(doc.url)[0]
+#                 doc.is_private = False
+#             doc.save()
+#             return Response({}, 204)
+#         else:
+#             return Response({'detail': 'Файл не найден'}, 404)
+#     else:
+#         return Response(form.errors,
+#                         status=status.HTTP_400_BAD_REQUEST)
