@@ -4,7 +4,7 @@ import { toast } from ".";
 import { navigate } from "@reach/router";
 
 const api = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: process.env.REACT_APP_API_URL ?? `${window.location.origin}/api`,
     // baseURL: "/api",
 });
 
